@@ -1,0 +1,173 @@
+{% comment %} <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin selection page</title>
+</head>
+
+<body>
+
+
+    <center><button><a href="voter">Voter Page</a></button>
+        <button> <a href="candidate">candidate page</a></button>
+        <button> <a href="individual_vote_count">Result</a></button></center>
+</body>
+
+</html> {% endcomment %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        .animate-charcter {
+            text-transform: uppercase;
+            background-image: linear-gradient(-225deg,
+                    #231557 0%,
+                    #44107a 29%,
+                    #ff1361 67%,
+                    #fff800 100%);
+            background-size: auto auto;
+            background-clip: border-box;
+            background-size: 200% auto;
+            color: #fff;
+            background-clip: text;
+            text-fill-color: transparent;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: textclip 2s linear infinite;
+            display: inline-block;
+            font-size: 60px;
+            text-align: center;
+        }
+
+        @keyframes textclip {
+            to {
+                background-position: 200% center;
+            }
+        }
+
+        @import url(https://fonts.googleapis.com/css?family=Montserrat);
+
+        *,
+        *::after,
+        *::before {
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: transparent;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+        }
+
+        button {
+            font-family: "Montserrat", sans-serif;
+            text-transform: uppercase;
+        }
+
+        button {
+            position: relative;
+            border: none;
+            font-size: 18px;
+            transition: color 0.5s, transform 0.2s, background-color 0.2s;
+            outline: none;
+            border-radius: 3px;
+            margin: 0 10px;
+            padding: 23px 33px;
+            border: 3px solid transparent;
+        }
+
+        button:active {
+            transform: translateY(3px);
+        }
+
+        button::after,
+        button::before {
+            border-radius: 3px;
+        }
+
+        .shrink-border {
+            background-color: transparent;
+            color: #1b1b20;
+        }
+
+        .shrink-border:hover {
+            background-color: transparent;
+            box-shadow: none;
+            color: #231557 ;
+        }
+
+        .shrink-border::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 3px solid #1b1b20;
+            transition: opacity 0.3s, border 0.3s;
+        }
+
+        .shrink-border:hover::before {
+            opacity: 0;
+        }
+
+        .shrink-border::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: transparent;
+            border: 3px solid #231557;
+            opacity: 0;
+            z-index: -1;
+            transform: scaleX(1.1) scaleY(1.3);
+            transition: transform 0.3s, opacity 0.3s;
+        }
+
+        .shrink-border:hover::after {
+            opacity: 1;
+            transform: scaleX(1) scaleY(1);
+        }
+    </style>
+
+</head>
+<body>
+    <div class="container">
+        <div>
+            <button class="shrink-border" style="margin-top:2cm"  onclick="location.href = 'voter';" id="myButton1">Voter Page</button>
+            <button class="shrink-border" style="margin-top:6cm"  onclick="location.href = 'candidate';" id="myButton2">candidate page</button>
+            <button class="shrink-border" style="margin-top:10cm" onclick="location.href = 'individual_vote_count';" id="myButton">Result</button>
+        </div>
+
+        <script type="text/javascript">
+            document.getElementById("myButton").onclick = function () {
+                location.href = "individual_vote_count";
+            };
+            document.getElementById("myButton1").onclick = function () {
+                location.href = "voter";
+            };
+            document.getElementById("myButton2").onclick = function () {
+                location.href = "candidate";
+            };
+        </script>
+
+    </div>
+    
+</body>
+</html>

@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+    <title>E-Voting</title>
+
+    <style>
+        .animate-charcter {
+            text-transform: uppercase;
+            background-image: linear-gradient(-225deg,
+                    #231557 0%,
+                    #44107a 29%,
+                    #ff1361 67%,
+                    #fff800 100%);
+            background-size: auto auto;
+            background-clip: border-box;
+            background-size: 200% auto;
+            color: #fff;
+            background-clip: text;
+            text-fill-color: transparent;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: textclip 2s linear infinite;
+            display: inline-block;
+            font-size: 60px;
+            text-align: center;
+        }
+
+        @keyframes textclip {
+            to {
+                background-position: 200% center;
+            }
+        }
+
+        @import url(https://fonts.googleapis.com/css?family=Montserrat);
+
+        *,
+        *::after,
+        *::before {
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: transparent;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+        }
+
+        button {
+            font-family: "Montserrat", sans-serif;
+            text-transform: uppercase;
+        }
+
+        button {
+            position: relative;
+            border: none;
+            font-size: 18px;
+            transition: color 0.5s, transform 0.2s, background-color 0.2s;
+            outline: none;
+            border-radius: 3px;
+            margin: 0 10px;
+            padding: 23px 33px;
+            border: 3px solid transparent;
+        }
+
+        button:active {
+            transform: translateY(3px);
+        }
+
+        button::after,
+        button::before {
+            border-radius: 3px;
+        }
+
+        .shrink-border {
+            background-color: transparent;
+            color: #1b1b20;
+        }
+
+        .shrink-border:hover {
+            background-color: transparent;
+            box-shadow: none;
+            color: #231557 ;
+        }
+
+        .shrink-border::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 3px solid #1b1b20;
+            transition: opacity 0.3s, border 0.3s;
+        }
+
+        .shrink-border:hover::before {
+            opacity: 0;
+        }
+
+        .shrink-border::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: transparent;
+            border: 3px solid #231557;
+            opacity: 0;
+            z-index: -1;
+            transform: scaleX(1.1) scaleY(1.3);
+            transition: transform 0.3s, opacity 0.3s;
+        }
+
+        .shrink-border:hover::after {
+            opacity: 1;
+            transform: scaleX(1) scaleY(1);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h3 class="animate-charcter"> Welcome to E-Voting System
+                </h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div>
+            <button class="shrink-border" style="margin-top:2cm" onclick="location.href = 'vote_verification';" id="myButton">Go to Voting Page</button>
+        </div>
+
+        <script type="text/javascript">
+            document.getElementById("myButton").onclick = function () {
+                location.href = "vote_verification";
+            };
+        </script>
+
+    </div>
+
+    <div class="container">
+        <div>
+            <button class="shrink-border" style="margin-top:0.5cm" onclick="location.href = 'login';" id="myButton1">Admin Page</button>
+        </div>
+
+        <script type="text/javascript">
+            document.getElementById("myButton1").onclick = function () {
+                location.href = "login";
+            };
+        </script>
+
+    </div>
+
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+    -->
+    <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.0.0-beta.36/dist/web3.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" crossorigin="anonymous"></script>
+
+    <script>
+        var contract;
+        $(document).ready(function () {
+            web3 = new Web3(web3.currentProvider);
+            var address = "0xAce7bdBa1Cd95804C8f61E138239F51695Db2ad9";
+            var abi = [{
+                "constant": false,
+                "inputs": [{
+                    "internalType": "int256",
+                    "name": "cid",
+                    "type": "int256"
+                }, {
+                    "internalType": "int256",
+                    "name": "vcount",
+                    "type": "int256"
+                }],
+                "name": "addCandidates",
+                "outputs": [],
+                "payable": false,
+                "stateMutability": "nonpayable",
+                "type": "function"
+            }, {
+                "constant": false,
+                "inputs": [{
+                    "internalType": "int256",
+                    "name": "vid",
+                    "type": "int256"
+                }, {
+                    "internalType": "address",
+                    "name": "addr",
+                    "type": "address"
+                }],
+                "name": "voteInc",
+                "outputs": [],
+                "payable": false,
+                "stateMutability": "nonpayable",
+                "type": "function"
+            }, {
+                "constant": false,
+                "inputs": [],
+                "name": "winnerCandidate",
+                "outputs": [{
+                    "internalType": "int256",
+                    "name": "",
+                    "type": "int256"
+                }],
+                "payable": false,
+                "stateMutability": "nonpayable",
+                "type": "function"
+            }, {
+                "constant": true,
+                "inputs": [{
+                    "internalType": "int256",
+                    "name": "",
+                    "type": "int256"
+                }],
+                "name": "candidates",
+                "outputs": [{
+                    "internalType": "int256",
+                    "name": "",
+                    "type": "int256"
+                }],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            }, {
+                "constant": true,
+                "inputs": [{
+                    "internalType": "address",
+                    "name": "",
+                    "type": "address"
+                }],
+                "name": "voters",
+                "outputs": [{
+                    "internalType": "bool",
+                    "name": "",
+                    "type": "bool"
+                }],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            }];
+            contract = new web3.eth.Contract(abi, address);
+            contract.methods.winnercandidate().call().then(function (js) {
+                $('#abc').html(js);
+                console.log("Pls");
+            })
+        })
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <title>Candidate Details</title>
+</head>
+
+<body>
+    <div class="container mb-3 py-4">
+        <h1 class="text-center">Candidate Details</h1>
+        <form method="post" action="/candidate">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="cid">Candidate ID</label>
+                <input type="number" class="form-control" id="cid" name="cid" placeholder="Enter Candidate Id">
+            </div>
+
+            <div class="form-group">
+                <label for="cname">Name</label>
+                <input type="text" class="form-control" id="cname" name="cname" placeholder="Enter Candidate Name">
+            </div>
+            <div class="form-group">
+                <label for="constituency">Constituency</label>
+                <input type="text" class="form-control" id="constituency" name="constituency" placeholder="Enter Constituency">
+            </div>
+            <div class="form-group">
+                <label for="party">Party Name</label>
+                <input type="text" class="form-control" id="party" name="party" placeholder="Enter Party Name">
+            </div>
+            <div class="form-group">
+                <label for="vcount">Vote Count</label>
+                <input type="number" class="form-control" id="vcount" name="vcount" placeholder="Enter Candidate Vote Count" value="0">
+            </div>
+
+            <button class="btn btn-primary" type="submit" id="submitC">Submit</button>
+        </form>
+
+    </div>
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+    -->
+    <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.0.0-beta.36/dist/web3.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" crossorigin="anonymous"></script>
+    
+    <script defer>
+        var contract;
+        $(document).ready(function(){
+            console.log("Started C");
+            const provider = new Web3(window.web3.currentProvider);
+            console.log("web3", provider);
+            var address="0x4048E5cb4672567236343260D1c18B161D660319";
+            const abi = [
+            {
+                "constant": false,
+                "inputs": [
+                    {
+                        "internalType": "int256",
+                        "name": "cid",
+                        "type": "int256"
+                    },
+                    {
+                        "internalType": "int256",
+                        "name": "vcount",
+                        "type": "int256"
+                    }
+                ],
+                "name": "addCandidates",
+                "outputs": [],
+                "payable": false,
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "constant": false,
+                "inputs": [
+                    {
+                        "internalType": "int256",
+                        "name": "vid",
+                        "type": "int256"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "addr",
+                        "type": "address"
+                    }
+                ],
+                "name": "voteInc",
+                "outputs": [],
+                "payable": false,
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "constant": false,
+                "inputs": [],
+                "name": "winnerCandidate",
+                "outputs": [
+                    {
+                        "internalType": "int256",
+                        "name": "",
+                        "type": "int256"
+                    }
+                ],
+                "payable": false,
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [
+                    {
+                        "internalType": "int256",
+                        "name": "",
+                        "type": "int256"
+                    }
+                ],
+                "name": "candidates",
+                "outputs": [
+                    {
+                        "internalType": "int256",
+                        "name": "",
+                        "type": "int256"
+                    }
+                ],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [
+                    {
+                        "internalType": "address",
+                        "name": "",
+                        "type": "address"
+                    }
+                ],
+                "name": "voters",
+                "outputs": [
+                    {
+                        "internalType": "bool",
+                        "name": "",
+                        "type": "bool"
+                    }
+                ],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            }
+        ];
+            contract=new provider.eth.Contract(abi,address);
+            console.log(contract);
+            $('#submitC').click(function() {
+                
+                var cids;
+                cids = $('#cid').val();
+                var vc;
+                vc = $('#vcount').val();
+                //contract.methods.addCandidates(cids, vc).call().then(function(){
+                    // $('#abc').html(js);
+                //    console.log("Pls");
+                // })
+     
+                provider.eth.getAccounts().then(function(accounts) {
+                     var acc = accounts[0];
+                     console.log("Hello");
+
+                     return contract.methods.addCandidates(cids,vc).send({from: acc}).then(function(tx){
+                        console.log(tx); 
+                        return tx;
+                     });
+                 }).then(function(tx) {
+                     console.log(tx);
+                 }).catch(function(tx) {
+                     console.log(tx);
+                 });
+                 
+               
+            })
+        });
+    </script>
+
+  </body>
+</html>
